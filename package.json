@@ -1,0 +1,31 @@
+{
+  "name": "notion-blogger",
+  "version": "1.0.0",
+  "description": "A project that can let me write blog in notion",
+  "main": "index.js",
+  "scripts": {
+    "start": "node --no-deprecation .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Whitedragon115/Notion-Blogger.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Whitedragon115/Notion-Blogger/issues"
+  },
+  "homepage": "https://github.com/Whitedragon115/Notion-Blogger#readme",
+  "dependencies": {
+    "@notionhq/client": "^5.3.0",
+    "dot-env": "^0.0.1",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "i": "^0.3.7",
+    "notion-to-md": "^3.1.9",
+    "npm": "^11.6.2",
+    "prisma": "^6.18.0",
+    "request": "^2.88.2"
+  }
+}
