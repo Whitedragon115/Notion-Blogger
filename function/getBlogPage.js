@@ -1,7 +1,7 @@
 const { notion } = require('../index.js');
 const { fullSearch } = require('./search.js');
 
-async function getPage(dataSourceId) {
+async function getAllPage(dataSourceId) {
 
     const pages = await fullSearch();
     const filteredPages = pages.filter(page => page.parent.data_source_id === dataSourceId);
@@ -16,5 +16,5 @@ async function getPage(dataSourceId) {
 }
 
 module.exports = {
-    getAllPage: getPage
+    getAllPage
 }
