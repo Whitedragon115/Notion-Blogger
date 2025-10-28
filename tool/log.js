@@ -51,7 +51,7 @@ function formatLog(timestamp, level, message, meta) {
     }
     
     // Format: (levelColor)[(white)time(gray)|(levelColor)level(gray)](white) message
-    return `${colors.gray}+ ${colors.white}${timestamp} ${bold}${fg}${levelName} ${colors.reset}${levelName == '[ info    ]' ? colors.gray : fg}${message}${colors.reset}${metaStr}`;
+    return `${colors.gray}+ ${colors.white}${timestamp} ${bold}${fg}${levelName} ${colors.reset}${levelName == '[ info    ]' ? colors.gray : fg}${message.startsWith("!") ? (fg + message.slice(1)) : message}${colors.reset}${metaStr}`;
 }
 
 // ============================================
@@ -138,9 +138,11 @@ logger.box = function(message, type = 'info') {
     const colorObj = colors[type] || colors.info;
     const padding = ' '.repeat(message.length + 4);
     
+    logger.line();
     console.log(
-        `${colorObj.fg}${colorObj.bold}+ [ ${message} ]`
+        `${colorObj.fg}${colorObj.bold}+ ${colors.white}${getTimestamp()} ${colorObj.fg}${colorObj.bold}[ ${message} ]`
     );
+    logger.line()
 };
 
 // ============================================
