@@ -2,7 +2,7 @@ const { Client } = require("@notionhq/client");
 const fs = require('fs');
 require('dotenv').config();
 
-const logger = require('./tool/log.js');
+const logger = require('./utils/log.js');
 const silentLogger = { debug: () => { }, info: () => { }, warn: () => { }, error: () => { }, };
 
 const notion = new Client({
@@ -15,7 +15,7 @@ module.exports = { notion }
 logger.box('Initializing Notion Blogger Application', 'info');
 checkFiles();
 
-const { writeConfig, readConfig } = require('./tool/json.js');
+const { writeConfig, readConfig } = require('./utils/json.js');
 const { getMarkdown, getBlogPage } = require('./function/notion/page.js');
 const { express, app, load: loadAPI } = require('./api/server.js');
 

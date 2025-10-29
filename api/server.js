@@ -1,11 +1,13 @@
 const { notion } = require('../index.js');
-const logger = require('../tool/log.js');
+const logger = require('../utils/log.js');
 const fs = require('fs');
 const express = require('express');
+const { readConfig } = require('../utils/json.js');
 const app = express();
 
 const method = ['get', 'post', 'put', 'delete', 'patch'];
-const whitelist = ['download'];
+const apiWhitelist = ['download'];
+const ipWhitelist = ['::ffff:127.0.0.1', '::1'];
 const hideDisable = true;
 const beartoken = process.env.NOTION_TOKEN || '';
 
@@ -59,7 +61,7 @@ function loadApi(app) {
                     continue
                 }
 
-                app[router.method](apiPath, checkAuthlization, router.route);
+                app[router.method](apiPath, ipFilter, checkAuthlization, router.route);
                 logger.info(`${prefix}/${route} - ${router.description ?? ''}`);
 
             }
@@ -70,9 +72,16 @@ function loadApi(app) {
 
 }
 
+async function ipFilter(req, res, next) {
+    const ip = req.ip;
+    if (ipWhitelist.includes(ip)) return next();
+    if (readConfig('blacklist-ip').some(e => e.ip === ip)) return res.status(403).json({ error: 'Forbidden', reason: 'Your IP has been banned from accessing the API' });
+    next();
+}
+
 async function checkAuthlization(req, res, next) {
 
-    if (whitelist.includes(req.path.split('/').pop())) return next();
+    if (apiWhitelist.includes(req.path.split('/').pop())) return next();
 
     let authToken = req.headers['authorization']
     if (!authToken) return res.status(401).json({ error: 'Unauthorized' });
