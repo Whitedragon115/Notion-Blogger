@@ -1,9 +1,9 @@
 const fs = require('fs')
 
 const { getMarkdown, getPage } = require('../../function/notion/page.js');
-const logger = require('../../tool/log.js');
-const { formatDate } = require('../../tool/time.js');
-const { createDownload } = require('../../tool/file.js');
+const logger = require('../../utils/log.js');
+const { formatDate } = require('../../utils/time.js');
+const { createDownload } = require('../../utils/file.js');
 
 module.exports = {
     disable: false,
