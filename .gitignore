@@ -3,6 +3,7 @@ package-lock.json
 config.json
 node_modules/
 pnpm-lock.yaml
+posts/
 hexo/
 astro/
 hugo/
