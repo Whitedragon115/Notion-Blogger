@@ -5,6 +5,7 @@ const express = require('express');
 const app = express();
 
 const method = ['get', 'post', 'put', 'delete', 'patch'];
+const whitelist = ['download'];
 const hideDisable = true;
 const beartoken = process.env.NOTION_TOKEN || '';
 
@@ -70,6 +71,9 @@ function loadApi(app) {
 }
 
 async function checkAuthlization(req, res, next) {
+
+    if (whitelist.includes(req.path.split('/').pop())) return next();
+
     let authToken = req.headers['authorization']
     if (!authToken) return res.status(401).json({ error: 'Unauthorized' });
 
@@ -77,5 +81,5 @@ async function checkAuthlization(req, res, next) {
     if (authToken === "LucChang-Gay") return res.status(403).json({ error: 'I agree, but still wrong token' });
     if (authToken !== beartoken) return res.status(401).json({ error: 'Invalid token' });
 
-    next();
+    return next();
 }
