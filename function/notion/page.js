@@ -1,18 +1,23 @@
 const { NotionToMarkdown } = require('notion-to-md')
 const { notion } = require('../../index.js');
-const { fullChildrenSearch } = require('./search.js');
+const { fullChildrenSearch, fullSearch } = require('./search.js');
+const { dataSourceId } = require('../../config.json')
 
 const n2m = new NotionToMarkdown({
     notionClient: notion
 });
 
-async function getBlogPage(dataSourceId) {
+async function getBlogPage(raw = false, dtId = dataSourceId) {
     const pages = await fullSearch();
-    const filteredPages = pages.filter(page => page.parent.data_source_id === dataSourceId);
+
+    const filteredPages = pages.filter(page => page.parent.data_source_id === dtId && page.properties?.Title.title[0]?.plain_text);
+
+    if (raw) return filteredPages;
+
     const mappedPages = filteredPages.map(page => {
         return {
             pageTitle: page.properties.Title.title[0]?.plain_text || '<Untitled>',
-            pageId: page.id
+            pageId: page.id,
         }
     })
 
@@ -30,7 +35,7 @@ async function getMarkdown(pageId) {
     return mdString;
 }
 
-async function getPage(pageId) {
+async function getPages(pageId) {
     try {
         return await notion.pages.retrieve({ page_id: pageId });
     } catch (error) {
@@ -40,7 +45,7 @@ async function getPage(pageId) {
 
 module.exports = {
     getBlogPage,
-    getPage,
+    getPage: getPages,
     getBlockChildren,
     getMarkdown,
 }
